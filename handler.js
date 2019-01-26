@@ -1,14 +1,31 @@
-'use strict';
+'use strict'
+const AWS = require('aws-sdk')
+// Set the region
+AWS.config.update({
+  region: 'us-east-1'
+})
+const sqs = new AWS.SQS({
+  apiVersion: '2012-11-05'
+})
 
-module.exports.hello = async (event, context) => {
+async function hello (event, context) {
+  const params = {
+    DelaySeconds: 10,
+    QueueUrl: process.env.QUEUE_URL
+  }
+
+  const response = await sqs.sendMessage({
+    ...params,
+    MessageBody: 'hello world'
+  }).promise()
+
+  console.log(response)
+
   return {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: 'Go Serverless v1.0! Your function executed successfully!',
-      input: event,
-    }),
-  };
+    statusCode: 200
+  }
+}
 
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
-};
+module.exports = {
+  hello
+}
