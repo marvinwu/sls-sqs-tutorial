@@ -26,6 +26,15 @@ async function hello (event, context) {
   }
 }
 
+async function helloWorker (event, context) {
+  for (const record of event.Records) {
+    console.log(record)
+  }
+  return {
+    statusCode: 200
+  }
+}
 module.exports = {
-  hello
+  hello,
+  helloWorker
 }

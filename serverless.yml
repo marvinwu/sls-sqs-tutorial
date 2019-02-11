@@ -12,7 +12,10 @@ provider:
           - sqs:DeleteMessage
           - sqs:ReceiveMessage
       Resource: ${env:QUEUE_ARN}
-
 functions:
   hello:
     handler: handler.hello
+  helloWorker:
+    handler: handler.helloWorker
+    events:
+      - sqs: ${env:QUEUE_ARN}  
